@@ -1,17 +1,19 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import Todo from './components/Todo'
+import React from 'react';
+import Navbar from './components/Navbar';
+import './App.css';
+import { BrowserRouter as Router } from 'react-router-dom';  // Import BrowserRouter
+import AppRoutes from './AppRoutes';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-    <Navbar/>
-    <Todo/>
-    
-    </>
-  )
+    <Router>
+      <AuthProvider>
+      <Navbar />
+      <AppRoutes />
+      </AuthProvider>
+    </Router>
+  );
 }
 
-export default App
+export default App;
