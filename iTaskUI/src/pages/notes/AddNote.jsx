@@ -3,6 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Tostify from '../../components/Tostify'
+import { useAuth } from '../../contexts/AuthContext';
 
 
 function AddNote() {
@@ -10,6 +11,8 @@ function AddNote() {
   const [text, setText] = useState("")
   const [title, setTitle] = useState("")
   const editableDivRef = useRef(null);
+
+  const {authToken, logoutUser} = useAuth()
 
   const tostify_msg = (type, message) => {
     Tostify(type, message);
@@ -53,13 +56,18 @@ function AddNote() {
         const response = await fetch(URL, {
           method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + String(authToken.access),
           },
           body: JSON.stringify(data)
         });
 
         if (!response.ok) {
-          throw new Error("Network response was not ok !")
+          if (response.status === 401) {
+            logoutUser();
+            throw new Error('Unauthorized access - logging out');
+        }
+        throw new Error("Network response was not ok !")
         }
 
         const result = await response.json()
@@ -77,8 +85,6 @@ function AddNote() {
       }
     }
   }
-
-
   return (
     <>
       <div className="container">

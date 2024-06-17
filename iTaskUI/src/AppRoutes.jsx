@@ -7,16 +7,26 @@ import NotesListPage from './pages/notes/NotesListPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRouter from './utils/PrivateRouter'
+import { useAuth } from './contexts/AuthContext';
 
 const AppRoutes = () => {
+
+  const {user} = useAuth()
+
   return (
       <Routes>
+        {
+        user?
+        <Route path="/" element={<PrivateRouter element={<Todo />}/> } />
+        :
         <Route path="/" element={<Login />} />
+        }
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/todo" element={<PrivateRouter element={<Todo />}/> } />
-        <Route path="/notes/" element={<NotesListPage />} />
-        <Route path="/note/:slug" element={<NotePage />} />
-        <Route path="/note/new/" element={<AddNote />} />
+        <Route path="/notes/" element={ <PrivateRouter element = {<NotesListPage />} /> } />
+        <Route path="/note/:slug" element={<PrivateRouter element={<NotePage />}/> } />
+        <Route path="/note/new/" element={<PrivateRouter element={<AddNote />}/> } />
       </Routes>
   );
 };

@@ -9,8 +9,11 @@ import { TbPinnedOff } from "react-icons/tb";
 import { ToastContainer } from 'react-toastify';
 import Tostify from '../Tostify';
 
+import { useAuth } from '../../contexts/AuthContext';
 
 const Todo = () => {
+  const {authToken, logoutUser} = useAuth()
+
   const [todo, setTodo] = useState([])
   const [todoText, setTodoText] = useState("")
   const [editMode, setEditMode] = useState(false)
@@ -31,33 +34,33 @@ const Todo = () => {
   }
 
   const createTodo = async () => {
-    const data = { todo: todoText }
-    const URL = 'http://127.0.0.1:8000/api/todos/'
+    const data = { todo: todoText };
+    const URL = 'http://127.0.0.1:8000/api/todos/';
     try {
       const response = await fetch(URL, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
-        body: JSON.stringify(data)
-      })
+        body: JSON.stringify(data),
+      });
       if (response.ok) {
-        const response_data = await response.json()
-        fetchTodo()
-        setTodoText('')
-        tostify_msg("success", "Successfully Added Todo.")
-        setUnfinishedCheck(false)
+        const response_data = await response.json();
+        fetchTodo();
+        setTodoText('');
+        tostify_msg('success', 'Successfully Added Todo.');
+        setUnfinishedCheck(false);
+      } else {
+        if (response.status === 401) {
+          logoutUser();
+        }
+        throw Error('Network response was not OK !');
       }
-      else {
-        throw Error("Network response was not OK !")
-      }
-
+    } catch (error) {
+      console.log('ERROR', error);
     }
-    catch (error) {
-      console.log("ERROR", error)
-    }
-
-  }
+  };
 
   const fetchTodo = async (is_unfinished_checked) => {
     let URL;
@@ -73,16 +76,20 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         }
       });
       if (response.ok) {
         const data = await response.json()
         setTodo(data)
-      }
-      else {
+      }else {
+        if (response.status === 401) {
+          logoutUser();
+        }
         throw Error("Network response was not OK!")
       }
+      
     }
     catch (error) {
       console.log("ERROR", error)
@@ -95,7 +102,8 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
       })
       if (response.ok) {
@@ -108,6 +116,11 @@ const Todo = () => {
           setTodoId(item.id)
           setEditMode(true)
           inputRef.current.focus()
+        }
+      }
+      else{
+        if (response.status === 401) {
+          logoutUser();
         }
       }
     }
@@ -126,7 +139,8 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
         body: JSON.stringify(data)
       })
@@ -141,7 +155,10 @@ const Todo = () => {
 
       }
       else {
-        throw Error("Response was not OK!")
+        if (response.status === 401) {
+          logoutUser();
+          throw Error("Response was not OK!")
+        }
       }
     }
     catch (error) {
@@ -159,7 +176,8 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "PATCH",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
         body: JSON.stringify(data)
       })
@@ -171,6 +189,9 @@ const Todo = () => {
 
       }
       else {
+        if (response.status === 401) {
+          logoutUser();
+        }
         throw Error("Response was not OK!")
       }
     }
@@ -185,7 +206,8 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
       })
       if (response.status === 204) {
@@ -194,6 +216,12 @@ const Todo = () => {
         setTodoText("")
         setEditMode(false)
         setTodoId(null)
+      }
+      else{
+        if (response.status === 401) {
+          logoutUser();
+          throw Error("Response was not OK!")
+        }
       }
     }
     catch (error) {
@@ -220,7 +248,8 @@ const Todo = () => {
       const response = await fetch(URL, {
         method: "PATCH",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
         },
         body: JSON.stringify(data)
       })
@@ -229,6 +258,9 @@ const Todo = () => {
         fetchTodo()
       }
       else {
+        if (response.status === 401) {
+          logoutUser();
+        }
         throw Error("Response was not OK!")
       }
     }

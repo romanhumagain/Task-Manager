@@ -7,7 +7,7 @@ const PrivateRouter = ({element}) => {
   const is_authenticated = user?true:false
 
   return (
-    is_authenticated?element:<Navigate to={'/'}/>
+    is_authenticated?element:<Navigate to={'/login'}/>
   )
 }
 

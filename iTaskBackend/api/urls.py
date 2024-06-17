@@ -1,7 +1,7 @@
 from django.urls import path
 from base.views import RegisterUserView
 from todos.views import ListCreateTodoView, RetriveUpdateDeleteTodoView
-from notes.views import getNotes, createNote, fetchNote, deleteNote, updateNote
+from notes.views import getNotes, createNote, fetchNote, deleteNote, updateNote, CreateNoteView
 
 
 '''
@@ -22,4 +22,7 @@ urlpatterns = [
   path('fetch-note/<slug:slug>/',fetchNote, name="fetch_note" ),
   path('delete-note/<slug:slug>/',deleteNote, name="delete_note" ),
   path('update-note/<slug:slug>/',updateNote, name="update_note" ),  
+  
+  path('create/',CreateNoteView.as_view(), name="create" ),
+  
 ]

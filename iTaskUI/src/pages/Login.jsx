@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const Login = () => {
   const { loginUser } = useAuth();
@@ -32,6 +34,8 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
+
     </>
   );
 };

@@ -1,21 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import ListItem from '../../components/notes/ListItem';
 import AddButton from '../../components/notes/AddButton';
+import { useAuth } from '../../contexts/AuthContext';
 
 function NotesListPage() {
   const [notes, setNotes] = useState([]);
+  const {authToken, logoutUser} = useAuth()
 
   useEffect(() => {
     getNotes();
   }, []);
 
+
   const getNotes = async () => {
-    let URL = "http://127.0.0.1:8000/api/get-notes/";
-    let response = await fetch(URL);
-    let data = await response.json();
-    setNotes(data);
+    const URL = `http://127.0.0.1:8000/api/get-notes/`;
+    try {
+      const response = await fetch(URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authToken.access),
+        },
+      });
+      if (!response.ok) {
+        if (response.status === 401) {
+          logoutUser();
+          throw new Error('Unauthorized access - logging out');
+      }
+        throw new Error('Network response was not ok');
+      }
+      let data = await response.json();
+      setNotes(data);
+    } catch (error) {
+      console.error('Error getting note:', error);
+    }
   };
 
+  
   return (
     <>
     <div className='bg-slate-50 h-screen'>

@@ -101,7 +101,7 @@ const Register = () => {
           <button className='w-full rounded-lg bg-blue-600 text-white text-xl font-bold p-1 hover:bg-blue-500 ease-in-out transition duration-200' type='submit'>Register</button>
         </div>
         </form>
-        <p className='m-2 text-center mt-3'><span className=' text-white'>Already have account?<Link to='/' className='ml-2 text-blue-500'>Sign in</Link></span></p>
+        <p className='m-2 text-center mt-3'><span className=' text-white'>Already have account?<Link to='/login' className='ml-2 text-blue-500'>Sign in</Link></span></p>
 
 
 
