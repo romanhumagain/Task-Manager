@@ -31,6 +31,7 @@ function NotesListPage() {
       }
       let data = await response.json();
       setNotes(data);
+      
     } catch (error) {
       console.error('Error getting note:', error);
     }
@@ -49,7 +50,7 @@ function NotesListPage() {
             <AddButton />
           </div>
           {notes.map((note, index) => (
-            <div key={index}>
+            <div key={note.id}>
               <ListItem note={note} />
             </div>
           ))}

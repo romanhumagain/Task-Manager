@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 def note_image_upload_to(instance, filename):
-  return f'notes/{instance.slug}/{filename}'
+  return f'notes/{instance.title}/{filename}'
 
 class Note(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes', null=True, verbose_name='User')
@@ -16,7 +16,7 @@ class Note(models.Model):
   body = models.TextField(null=True)
   updated_date = models.DateField(auto_now=True)
   created_date = models.DateField(auto_now_add=True)
-  image = models.ImageField(upload_to=note_image_upload_to, null=True, blank=True)
+  image = models.ImageField(upload_to=note_image_upload_to, default='notes/notes.jpg')
   
   
   def save(self,*args, **kwargs):

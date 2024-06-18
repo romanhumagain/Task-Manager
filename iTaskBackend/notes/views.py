@@ -14,7 +14,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 @permission_classes([IsAuthenticatedOrReadOnly])
 def getNotes(request):
     user = request.user
-    notes_obj = user.notes.all().order_by("-updated_date", "-created_date")
+    notes_obj = Note.objects.filter(user = user).order_by("-updated_date", "-created_date")
     serializer = NoteSerializer(notes_obj, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
   
