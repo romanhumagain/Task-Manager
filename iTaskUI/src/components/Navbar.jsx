@@ -27,8 +27,8 @@ const Navbar = () => {
               <Link to={'/notes'}><span className='text-red-500'>i</span>Notes</Link>
             </div>
 
-            <div className={`logo mx-8 text-xl font-semibold cursor-pointer hover:shadow-slate-300 ${isActive('expenses') ? "scale-125 transition duration-500 font-bold text-2xl" : null}`}>
-              <span className='text-red-500'>i</span>Expenses
+            <div className={`logo mx-8 text-xl font-semibold cursor-pointer hover:shadow-slate-300 ${isActive('expense') ? "scale-125 transition duration-500 font-bold text-2xl" : null}`}>
+            <Link to={'/expense'}> <span className='text-red-500'>i</span>Expenses</Link>
             </div>
           </div>
         ) :

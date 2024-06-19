@@ -95,25 +95,25 @@ function AddNote() {
   return (
     <>
       <div className="container">
-        <h2 className='mt-3 text-center  font-bold text-3xl mb-3 text-red-500'>
+        <h2 className='mt-3 text-center  font-bold text-3xl mb-3 text-gray-900'>
           Add Note
         </h2>
-        <div className="card note-details max-w-7xl mx-20 h-auto bg-neutral-700">
+        <div className="card note-details max-w-7xl mx-20 h-auto bg-slate-300">
           <div className="card-body">
             <div className="note-header mt-1">
               <input className='title-input fw-bold fs-4' value={title} onChange={handleOnChangeTitle} placeholder='Title'></input>
               <h5 className="card-title my-2"></h5>
               <div className="buttons">
-                <button className='rounded-full  p-2 text-md border-white border-1 hover:bg-red-700  ease-in-out transition duration-700' onClick={addNote}>Add Note</button>
+                <button className='rounded-full  p-2 text-md bg-gray-800 border-white border-1 hover:bg-gray-700  ease-in-out transition duration-700' onClick={addNote}>Add Note</button>
               
               </div>
             </div>
             <input className=' bg-gray-300 text-black rounded-lg mt-3' placeholder='Note Cover Image' type='file' accept="image/*" onChange={handleImage}/>
             
-            <p className='mt-3 font-bold text-gray-100 text-xl'>Note Body</p>
+            <p className='mt-3 font-bold text-gray-700 text-xl'>Note Body</p>
             <div
               ref={editableDivRef}
-              className='note-area bg-zinc-500 text-white placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-72  w-full mt-2 '
+              className='note-area bg-gray-400 text-white placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-72  w-full mt-2 '
               contentEditable
               onInput={handleEditableChange}
               placeholder='Note Body'

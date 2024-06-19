@@ -130,14 +130,14 @@ function NotePage() {
   return (
     <>
       <div className="container">
-        <h2 className="mt-3 text-center font-bold text-3xl mb-3 text-red-500">
+        <h2 className="mt-3 text-center font-bold text-3xl mb-3 text-gray-900">
           Note Details
         </h2>
-        <div className="card note-details mt-5 max-w-7xl mx-20 bg-neutral-700">
+        <div className="card note-details mt-5 max-w-7xl mx-20 bg-slate-300 shadow-md">
           <div className="card-body">
             <div className="note-header">
               <input
-                className="title-input fw-bold fs-4"
+                className="title-input fw-bold fs-4 text-gray-800"
                 value={title}
                 onChange={handleOnChangeTitle}
               />
@@ -158,13 +158,13 @@ function NotePage() {
             </div>
             <div
               ref={editableDivRef}
-              className="note-area bg-zinc-500 text-white placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-64 w-full mt-2"
+              className="note-area bg-gray-400 text-gray-800 placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-64 w-full mt-2"
               contentEditable
               onInput={handleEditableChange}
               placeholder="Note Body"
             />
             {note && (
-              <div className="footer d-flex g-4 mt-5 float-end">
+              <div className="footer d-flex g-4 mt-5 float-end text-gray-900">
                 <p className="card-link fw-lighter">
                   Created: {new Date(note.created_date).toLocaleDateString()}
                 </p>

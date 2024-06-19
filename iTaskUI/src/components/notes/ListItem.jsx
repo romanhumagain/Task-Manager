@@ -9,7 +9,7 @@ function ListItem(props) {
     <>
       <div className="all-notes col-span-1 relative">
       <Link to={`/note/${props.note.slug}`}>
-        <div className="bg-slate-300 rounded shadow-md overflow-hidden">
+        <div className="bg-slate-200 rounded shadow-md overflow-hidden">
           <img src={props.note.image && `${'http://127.0.0.1:8000'}${props.note.image}`} alt='notes-img' className='w-full h-32 sm:48 object-cover'/>
           <div className="card-body p-4">
             

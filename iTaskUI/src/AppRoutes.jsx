@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRouter from './utils/PrivateRouter'
 import { useAuth } from './contexts/AuthContext';
+import ExpenseTracker from './pages/expenses/ExpenseTracker';
 
 const AppRoutes = () => {
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route path="/notes/" element={ <PrivateRouter element = {<NotesListPage />} /> } />
         <Route path="/note/:slug" element={<PrivateRouter element={<NotePage />}/> } />
         <Route path="/note/new/" element={<PrivateRouter element={<AddNote />}/> } />
+        <Route path='expense/' element ={<ExpenseTracker/>} />
       </Routes>
   );
 };

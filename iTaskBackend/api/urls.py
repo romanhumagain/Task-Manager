@@ -1,8 +1,20 @@
-from django.urls import path
+from django.urls import path, include
 from base.views import RegisterUserView
 from todos.views import ListCreateTodoView, RetriveUpdateDeleteTodoView
 from notes.views import getNotes, createNote, fetchNote, deleteNote, updateNote, CreateNoteView
+from rest_framework_nested import routers
 
+from expenses.views import BudgetHistoryViewSet, BudgetViewSet, ExpenseViewSet
+
+'''
+Creating a router for the Expense tracker
+'''
+router = routers.DefaultRouter()
+router.register(r'budgets', BudgetViewSet, basename='budget')
+
+budget_router = routers.NestedDefaultRouter(router, r'budgets', lookup='budget')
+budget_router.register(r'expenses', ExpenseViewSet, basename='budget-expenses')
+budget_router.register(r'history', BudgetHistoryViewSet, basename='budget-history')
 
 '''
 All the end points for this iTask app
@@ -25,4 +37,10 @@ urlpatterns = [
   
   path('create-note/',CreateNoteView.as_view(), name="create-note" ),
   
+  # endpoints for the expense tracker
+  path('', include(router.urls)),
+  path('', include(budget_router.urls)),
+  
 ]
+
+# endpoints for the expense tracker

@@ -40,12 +40,12 @@ function NotesListPage() {
   
   return (
     <>
-    <div className='bg-slate-50 h-screen'>
-    <h2 className='mt-4 text-center  font-bold text-3xl text-red-500'>
+    <div className='bg-slate-200 h-screen'>
+    <h2 className='mt-4 text-center  font-bold text-3xl text-gray-600'>
           Your Available Notes
         </h2>
-      <div className="flex justify-center items-center mt-5 h-auto bg-slate-50">
-        <div className="relative rounded-lg shadow-md p-6 py-8 max-w-6xl w-full bg-neutral-700 m-2 grid md:grid-cols-3 gap-7">
+      <div className="flex justify-center items-center mt-5 h-auto bg-slate-200">
+        <div className="relative rounded-lg shadow-md p-6 py-8 max-w-6xl w-full bg-slate-300 m-2 grid md:grid-cols-3 gap-7">
           <div className="absolute -top-3 -right-3">
             <AddButton />
           </div>
