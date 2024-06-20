@@ -1,17 +1,17 @@
 import React from 'react'
 
-const ExistingBudget = () => {
-  const totalAmount = 129090;
-  const spentAmount = 9.56;
-  const remainingAmount = totalAmount - spentAmount;
+const ExistingBudget = ({data}) => {
+
+  const totalAmount = data.amount;
+  const spentAmount = data.spent_budget;
+  const remainingAmount = data.remaining_budget
   const progressPercentage = (spentAmount / totalAmount) * 100;
 
-  console.log(progressPercentage)
   return (
     <div className='bg-slate-300 rounded-lg shadow p-10 mb-5 grid grid-cols-1 gap-4 border-red-300 border-1 border-opacity-30'>
       <div className='flex justify-between'>
-        <p className='text-red-500 font-semibold text-lg'>Groceries</p>
-        <p className='text-red-500 font-semibold text-lg'>${totalAmount.toLocaleString()}</p>
+        <p className='text-red-500 font-semibold text-lg'>{data.budget_name}</p>
+        <p className='text-red-500 font-semibold text-lg'>${data.amount}</p>
       </div>
 
       <div>
@@ -24,8 +24,8 @@ const ExistingBudget = () => {
         </div>
 
         <div className='flex justify-between '>
-          <p className='text-red-400 font-semibold text-sm'>${spentAmount.toFixed(2)} Spent</p>
-          <p className='text-red-400 font-semibold text-sm'>${remainingAmount.toLocaleString()} Remaining</p>
+          <p className='text-red-400 font-semibold text-sm'>${data.spent_budget} Spent</p>
+          <p className='text-red-400 font-semibold text-sm'>${data.remaining_budget} Remaining</p>
         </div>
       </div>
 

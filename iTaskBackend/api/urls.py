@@ -41,6 +41,9 @@ urlpatterns = [
   path('', include(router.urls)),
   path('', include(budget_router.urls)),
   
+  # Endpoint to retrieve all expenses
+    path('expenses/', ExpenseViewSet.as_view({'get': 'list'}), name='list-all-expenses'),
+  
 ]
 
 # endpoints for the expense tracker

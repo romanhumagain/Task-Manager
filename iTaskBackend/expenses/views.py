@@ -18,21 +18,32 @@ class BudgetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(user=user)
-    
-
+        
 class ExpenseViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
 
     def get_queryset(self):
-        budget_id = self.kwargs['budget_pk']
-        return self.queryset.filter(user=self.request.user, budget_id=budget_id)
+        if 'budget_pk' in self.kwargs:
+            budget_id = self.kwargs['budget_pk']
+            return self.queryset.filter(user=self.request.user, budget_id=budget_id)
+        else:
+            return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        budget_id = self.kwargs['budget_pk']
-        budget = get_object_or_404(Budget, id=budget_id, user=self.request.user)  # Ensure the budget exists and belongs to the user
-        serializer.save(user=self.request.user, budget=budget)
+        if 'budget_pk' in self.kwargs:
+            budget_id = self.kwargs['budget_pk']
+            budget = get_object_or_404(Budget, id=budget_id, user=self.request.user)
+            serializer.save(user=self.request.user, budget=budget)
+        else:
+            serializer.save(user=self.request.user)
+        
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        print(serializer.data)
+        return Response(serializer.data)
 
 
 class BudgetHistoryViewSet(viewsets.ModelViewSet):
@@ -46,5 +57,5 @@ class BudgetHistoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         budget_id = self.kwargs['budget_pk']
-        budget = get_object_or_404(Budget, id=budget_id, user=self.request.user)  # Ensure the budget exists and belongs to the user
+        budget = get_object_or_404(Budget, id=budget_id, user=self.request.user)
         serializer.save(budget=budget)

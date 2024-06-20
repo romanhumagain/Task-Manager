@@ -9,27 +9,34 @@ import Register from './pages/Register';
 import PrivateRouter from './utils/PrivateRouter'
 import { useAuth } from './contexts/AuthContext';
 import ExpenseTracker from './pages/expenses/ExpenseTracker';
+import { BudgetContextProvider } from './contexts/BudgetContext'
 
 const AppRoutes = () => {
 
-  const {user} = useAuth()
+  const { user } = useAuth()
 
   return (
-      <Routes>
-        {
-        user?
-        <Route path="/" element={<PrivateRouter element={<Todo />}/> } />
-        :
-        <Route path="/" element={<Login />} />
-        }
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/todo" element={<PrivateRouter element={<Todo />}/> } />
-        <Route path="/notes/" element={ <PrivateRouter element = {<NotesListPage />} /> } />
-        <Route path="/note/:slug" element={<PrivateRouter element={<NotePage />}/> } />
-        <Route path="/note/new/" element={<PrivateRouter element={<AddNote />}/> } />
-        <Route path='expense/' element ={<ExpenseTracker/>} />
-      </Routes>
+    <Routes>
+      {
+        user ?
+          <Route path="/" element={<PrivateRouter element={<Todo />} />} />
+          :
+          <Route path="/" element={<Login />} />
+      }
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/todo" element={<PrivateRouter element={<Todo />} />} />
+      <Route path="/notes/" element={<PrivateRouter element={<NotesListPage />} />} />
+      <Route path="/note/:slug" element={<PrivateRouter element={<NotePage />} />} />
+      <Route path="/note/new/" element={<PrivateRouter element={<AddNote />} />} />
+
+      <Route path='expense/' element={
+        <BudgetContextProvider>
+          <ExpenseTracker />
+        </BudgetContextProvider>
+      } />
+
+    </Routes>
   );
 };
 

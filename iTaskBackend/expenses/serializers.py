@@ -11,9 +11,13 @@ class BudgetSerializer(ModelSerializer):
     fields = '__all__'
     
 class ExpenseSerializer(ModelSerializer):
+  budget_name = serializers.SerializerMethodField()
   class Meta:
     model = Expense
     fields = '__all__'
+    
+  def get_budget_name(self, obj):
+    return obj.budget.budget_name if obj.budget else None
     
     
 class BudgetHistorySerializer(ModelSerializer):
