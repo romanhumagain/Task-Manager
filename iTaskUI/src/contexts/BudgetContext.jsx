@@ -15,6 +15,8 @@ export const BudgetContextProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isBudgetAdded, setIsBudgetAdded] = useState(false);
   const [isExpenseAdded, setIsExpenseAdded] = useState(false);
+  const [isExpenseDeleted, setIsExpensesDeleted] = useState(false);
+
 
   
   const axiosInstance = createAxiosInstance();
@@ -28,16 +30,18 @@ export const BudgetContextProvider = ({ children }) => {
     if(isBudgetAdded){
       fetchBudget()
       setIsBudgetAdded(false)
-      console.log("budget added")
     }
     else if(isExpenseAdded){
       fetchBudget();
       fetchExpenses();
       setIsExpenseAdded(false)
-      console.log("expense added")
-
     }
-  },[isBudgetAdded,isExpenseAdded])
+    else if(isExpenseDeleted){
+      fetchBudget();
+      fetchExpenses();
+      setIsExpensesDeleted(false)
+    }
+  },[isBudgetAdded,isExpenseAdded,isExpenseDeleted])
 
 
   const fetchBudget = async () => {
@@ -71,6 +75,7 @@ export const BudgetContextProvider = ({ children }) => {
     expensesData:expensesData,
     setIsBudgetAdded:setIsBudgetAdded,
     setIsExpenseAdded:setIsExpenseAdded,
+    setIsExpensesDeleted,
     loading:loading,
     error:error
   };

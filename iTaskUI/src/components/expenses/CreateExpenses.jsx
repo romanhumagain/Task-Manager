@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import createAxiosInstance from '../../api/axiosInstance';
 import { useBudget } from '../../contexts/BudgetContext';
-import { ToastContainer } from 'react-toastify';
 import Tostify from '../Tostify';
 
 
@@ -101,7 +100,6 @@ const CreateExpenses = () => {
           Add Expenses
         </button>
       </form>
-      <ToastContainer/>
     </div>
   );
 };

@@ -5,14 +5,24 @@ import ExistingBudget from '../../components/expenses/ExistingBudget';
 import ExpensesTable from '../../components/expenses/ExpensesTable';
 
 import { useBudget } from '../../contexts/BudgetContext';
+import { ToastContainer } from 'react-toastify';
 
 
 const ExpenseTracker = () => {
   const {budgetData} = useBudget()
+  const colors_array = [
+    'red',
+    'green',
+    'yellow',
+    'orange',
+    'blue',
+    'teal'
+  ]
+  let color_ind = 0
 
   return (
     <div className="md:m-20 m-10">
-      <h1 className='text-3xl font-bold text-slate-700 mb-3 -mt-6 text-center'>Track Your Expenses</h1>
+      <h1 className='text-3xl font-bold text-slate-700 mb-3 -mt-6 text-center bg'>Track Your Expenses</h1>
       {/* Container for creating budget and expenses */}
       <div className="bg-slate-200 rounded-lg p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
         <CreateBudget />
@@ -22,10 +32,16 @@ const ExpenseTracker = () => {
       <h1 className='text-3xl font-bold text-slate-700 mb-3 -mt-6 text-center'>Your Existing Budget</h1>
 
       <div className="bg-slate-200 rounded-lg p-10 grid grid-cols-1 md:grid-cols-3 gap-5">
-        {budgetData && budgetData.map((data)=>{
+        {budgetData && budgetData.map((data, index)=>{
+          if(index === 5){
+            color_ind = 0
+          }
+          const color = colors_array[color_ind]
+          color_ind += 1
+
           return(
             <div key={data.id}>
-                <ExistingBudget data={data}/>
+                <ExistingBudget color={color} data={data}/>
             </div>
           )
         })}
@@ -37,6 +53,7 @@ const ExpenseTracker = () => {
       <div className="m-20 bg-slate-300 rounded-lg shadow p-10">
         <ExpensesTable/>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

@@ -1,9 +1,35 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { MdDelete } from "react-icons/md";
 import { useBudget } from '../../contexts/BudgetContext';
+import createAxiosInstance from '../../api/axiosInstance';
+import Tostify from '../Tostify';
 
 const ExpensesTable = () => {
-  const { expensesData } = useBudget()
+  const axiosInstance = createAxiosInstance()
+  const [error, setError] = useState(null)
+
+  const { expensesData,setIsExpensesDeleted } = useBudget()
+
+  const tostify_msg = (type, error)=>{
+    Tostify(type, error)
+  }
+
+  const deleteExpense = async (budget_id, expense_id)=>{
+    try {
+      await axiosInstance.delete(`budgets/${budget_id}/expenses/${expense_id}/`)
+      setError(null)
+      tostify_msg("success", "Successfully Deleted Expense Details.")
+      setIsExpensesDeleted(true)
+    } catch (error) {
+      setError(error)
+      tostify_msg("error", error)
+
+    }
+  }
+
+  if(error){
+    return(<div>Error ... `${error}`</div>)
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -27,7 +53,7 @@ const ExpensesTable = () => {
         <tbody>
           {expensesData && expensesData.map((data) => {
             return (
-              <tr className="hover:bg-gray-100">
+              <tr className="hover:bg-gray-100" key={data.id}>
                 <td className="px-6 py-4 border-b border-gray-200">
                   {data.name}
                 </td>
@@ -40,9 +66,8 @@ const ExpensesTable = () => {
                 <td className="px-6 py-4 border-b border-gray-200">
                   {data.budget_name}
                 </td>
-
                 <td className="px-6 py-4 border-b border-gray-200">
-                  <button><MdDelete className='text-red-500 text-3xl' /></button>
+                  <button onClick={()=>{deleteExpense(data.budget_id, data.id)}} ><MdDelete className='text-red-500 text-3xl' /></button>
                 </td>
 
               </tr>

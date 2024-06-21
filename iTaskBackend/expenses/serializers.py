@@ -11,13 +11,22 @@ class BudgetSerializer(ModelSerializer):
     fields = '__all__'
     
 class ExpenseSerializer(ModelSerializer):
-  budget_name = serializers.SerializerMethodField()
+  ''' If you want to get all the budget details as budget act as a foreign key in the expense table'''
+  # budget = BudgetSerializer(read_only = True)
+  
+  '''If you want to get a specific data from the budget table'''
+  budget_name = serializers.SerializerMethodField(read_only = True)
+  budget_id = serializers.SerializerMethodField(read_only = True)
+  
   class Meta:
     model = Expense
     fields = '__all__'
     
   def get_budget_name(self, obj):
     return obj.budget.budget_name if obj.budget else None
+  
+  def get_budget_id(self, obj):
+    return obj.budget.id if obj.budget else None
     
     
 class BudgetHistorySerializer(ModelSerializer):
