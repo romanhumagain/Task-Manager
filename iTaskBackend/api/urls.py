@@ -1,7 +1,7 @@
 from django.urls import path, include
 from base.views import RegisterUserView
 from todos.views import ListCreateTodoView, RetriveUpdateDeleteTodoView
-from notes.views import getNotes, createNote, fetchNote, deleteNote, updateNote, CreateNoteView
+from notes.views import NoteListView, createNote, fetchNote, deleteNote, updateNote, CreateNoteView
 from rest_framework_nested import routers
 
 from expenses.views import BudgetHistoryViewSet, BudgetViewSet, ExpenseViewSet
@@ -29,7 +29,7 @@ urlpatterns = [
   path('todos/<int:pk>/', RetriveUpdateDeleteTodoView.as_view(), name='retrieve-update-delete-todo'),
   
   # endpoints for the notes application
-  path('get-notes/',getNotes, name="get_notes" ),
+  path('get-notes/',NoteListView.as_view(), name="get_notes" ),
   # path('create-note/',createNote, name="create_note" ),
   path('fetch-note/<slug:slug>/',fetchNote, name="fetch_note" ),
   path('delete-note/<slug:slug>/',deleteNote, name="delete_note" ),

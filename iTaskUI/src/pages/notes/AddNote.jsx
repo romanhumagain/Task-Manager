@@ -5,27 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import Tostify from '../../components/Tostify'
 import { useAuth } from '../../contexts/AuthContext';
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function AddNote() {
   const navigate = useNavigate()
   const [text, setText] = useState("")
   const [title, setTitle] = useState("")
   const [image, setImage] = useState(null)
-  const editableDivRef = useRef(null);
+  const [isAdding, setIsAdding] = useState(false)
 
-  const {authToken, logoutUser} = useAuth()
+  const { authToken, logoutUser } = useAuth()
 
   const tostify_msg = (type, message) => {
     Tostify(type, message);
-  }
-
-  const handleEditableChange = () => {
-    setText(editableDivRef.current.innerText);
-  };
-
-  const handleOnChange = (event) => {
-    let text = event.target.value
-    setText(text)
   }
 
   const handleOnChangeTitle = (event) => {
@@ -33,7 +26,7 @@ function AddNote() {
     setTitle(title)
   }
 
-  const handleImage = (e)=>{
+  const handleImage = (e) => {
     let note_img = e.target.files[0]
     setImage(note_img)
 
@@ -59,8 +52,9 @@ function AddNote() {
       if (image) {
         formData.append('image', image);
       }
-  
+
       try {
+        setIsAdding(true)
         const response = await fetch(URL, {
           method: "POST",
           headers: {
@@ -68,7 +62,7 @@ function AddNote() {
           },
           body: formData
         });
-  
+
         if (!response.ok) {
           if (response.status === 401) {
             logoutUser();
@@ -76,22 +70,23 @@ function AddNote() {
           }
           throw new Error("Network response was not ok!");
         }
-  
+
         const result = await response.json();
         console.log(result);
-  
+
         tostify_msg("success", "Successfully Added Note.");
-  
+
         setTimeout(() => {
           navigate('/notes');
+          setIsAdding(false)
         }, 2000);
-  
+
       } catch (error) {
         console.log("ERROR OCCUR", error);
       }
     }
   };
-  
+
   return (
     <>
       <div className="container">
@@ -101,24 +96,20 @@ function AddNote() {
         <div className="card note-details max-w-7xl mx-20 h-auto bg-slate-300">
           <div className="card-body">
             <div className="note-header mt-1">
-              <input className='title-input fw-bold fs-4' value={title} onChange={handleOnChangeTitle} placeholder='Title'></input>
+              <input className='title-input fw-bold fs-4 text-black px-2' value={title} onChange={handleOnChangeTitle} placeholder='Title'></input>
               <h5 className="card-title my-2"></h5>
               <div className="buttons">
-                <button className='rounded-full  p-2 text-md bg-gray-800 border-white border-1 hover:bg-gray-700  ease-in-out transition duration-700' onClick={addNote}>Add Note</button>
-              
+                <button className='rounded-full  p-2 text-md bg-gray-800 border-white border-1 hover:bg-gray-700  ease-in-out transition duration-700' disabled={isAdding} onClick={addNote}>Add Note</button>
+
               </div>
             </div>
-            <input className=' bg-gray-300 text-black rounded-lg mt-3' placeholder='Note Cover Image' type='file' accept="image/*" onChange={handleImage}/>
-            
+            <input className=' bg-gray-300 text-black rounded-lg mt-3' placeholder='Note Cover Image' type='file' accept="image/*" onChange={handleImage} />
+
             <p className='mt-3 font-bold text-gray-700 text-xl'>Note Body</p>
-            <div
-              ref={editableDivRef}
-              className='note-area bg-gray-400 text-white placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-72  w-full mt-2 '
-              contentEditable
-              onInput={handleEditableChange}
-              placeholder='Note Body'
-            />
-            </div>
+
+            <ReactQuill theme="snow" value={text} onChange={(newText) => setText(newText)} className='text-black text-3xl' />
+
+          </div>
         </div>
       </div>
       <ToastContainer />

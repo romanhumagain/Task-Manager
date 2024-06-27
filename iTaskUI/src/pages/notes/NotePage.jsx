@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Tostify from '../../components/Tostify';
 import { useAuth } from '../../contexts/AuthContext';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function NotePage() {
   const params = useParams();
@@ -14,6 +16,9 @@ function NotePage() {
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const editableDivRef = useRef(null);
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
 
   const { authToken, logoutUser } = useAuth();
 
@@ -37,7 +42,7 @@ function NotePage() {
       });
       if (response.status === 200) {
         const data = await response.json();
-      
+
         setNote(data);
         setTitle(data.title);
         setText(data.body);
@@ -56,10 +61,6 @@ function NotePage() {
     }
   };
 
-  const handleEditableChange = () => {
-    setText(editableDivRef.current.innerText);
-  };
-
   const handleOnChangeTitle = (event) => {
     let title = event.target.value;
     setTitle(title);
@@ -74,6 +75,7 @@ function NotePage() {
     const URL = `http://127.0.0.1:8000/api/update-note/${slug_field}/`;
 
     try {
+      setIsUpdating(true)
       const response = await fetch(URL, {
         method: 'PUT',
         headers: {
@@ -88,6 +90,8 @@ function NotePage() {
         tostify_msg('success', 'Successfully Updated Note.');
         setTimeout(() => {
           navigate('/notes');
+          setIsUpdating(false)
+
         }, 2000);
       } else if (response.status === 401) {
         logoutUser();
@@ -96,6 +100,7 @@ function NotePage() {
         throw new Error('Network response was not ok');
       }
     } catch (error) {
+      setIsUpdating(false)
       console.error('There was a problem with the fetch operation:', error);
     }
   };
@@ -103,6 +108,7 @@ function NotePage() {
   const deleteNote = async () => {
     const URL = `http://127.0.0.1:8000/api/delete-note/${slug_field}/`;
     try {
+      setIsDeleting(true)
       const response = await fetch(URL, {
         method: 'DELETE',
         headers: {
@@ -115,6 +121,7 @@ function NotePage() {
         tostify_msg('success', 'Successfully Deleted Note.');
         setTimeout(() => {
           navigate('/notes');
+          setIsDeleting(false)
         }, 2000);
       } else if (response.status === 401) {
         logoutUser();
@@ -123,6 +130,7 @@ function NotePage() {
         throw new Error('Network response was not ok');
       }
     } catch (error) {
+      setIsDeleting(false)
       console.error('There was a problem with the fetch operation:', error);
     }
   };
@@ -137,32 +145,27 @@ function NotePage() {
           <div className="card-body">
             <div className="note-header">
               <input
-                className="title-input fw-bold fs-4 text-gray-800"
+                className="title-input fw-bold fs-4 text-gray-800 mx-4 "
                 value={title}
                 onChange={handleOnChangeTitle}
               />
               <div className="buttons">
                 <button
-                  className="rounded-full bg-slate-900 p-2 text-md border-white border-1 hover:bg-slate-800 ease-in-out transition duration-700"
+                  className="rounded-full bg-slate-900 p-2 text-md border-white border-1 hover:bg-slate-800 ease-in-out transition duration-700" disabled={isUpdating}
                   onClick={updateNote}
                 >
                   Update
                 </button>
                 <button
-                  className="ml-1 rounded-full bg-red-500 p-2 text-md border-white border-1 hover:bg-red-400 ease-in-out transition duration-700"
+                  className="ml-1 rounded-full bg-red-500 p-2 text-md border-white border-1 hover:bg-red-400 ease-in-out transition duration-700" disabled={isDeleting}
                   onClick={deleteNote}
                 >
                   Delete
                 </button>
               </div>
             </div>
-            <div
-              ref={editableDivRef}
-              className="note-area bg-gray-400 text-gray-800 placeholder-gray-400 border border-gray-500 rounded-lg px-3 py-2 outline-none resize-none min-h-64 w-full mt-2"
-              contentEditable
-              onInput={handleEditableChange}
-              placeholder="Note Body"
-            />
+            <ReactQuill theme="snow" value={text} onChange={(newText) => setText(newText)} className='p-4 text-black text-3xl' />
+
             {note && (
               <div className="footer d-flex g-4 mt-5 float-end text-gray-900">
                 <p className="card-link fw-lighter">

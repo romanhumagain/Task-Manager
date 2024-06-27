@@ -13,7 +13,7 @@ const ExpenseTracker = () => {
   const colors_array = [
     'red',
     'green',
-    'yellow',
+    'red',
     'orange',
     'blue',
     'teal'

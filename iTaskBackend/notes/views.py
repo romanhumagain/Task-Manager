@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,15 +9,34 @@ from .serializers import NoteSerializer
 from .models import Note
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import filters
+from rest_framework import generics
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticatedOrReadOnly])
-def getNotes(request):
-    user = request.user
-    notes_obj = Note.objects.filter(user = user).order_by("-updated_date", "-created_date")
-    serializer = NoteSerializer(notes_obj, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticatedOrReadOnly])
+# def getNotes(request):
+#     user = request.user
+#     search_query = request.query_params('search', None)
+#     if search_query is not None:
+#         notes_obj = Note.objects.filter(Q(title__icontains = search_query)|
+#                                         Q(body__icontains = search_query)).order_by("-updated_date", "-created_date")
+#     else:
+#         notes_obj = Note.objects.filter(user = user).order_by("-updated_date", "-created_date")
+     
+#     serializer = NoteSerializer(notes_obj, many=True)
+#     return Response(serializer.data, status=status.HTTP_200_OK)
+
+class NoteListView(generics.ListAPIView):
+    serializer_class = NoteSerializer
+    permission_classes =[IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'body']
+
+    def get_queryset(self):
+        user = self.request.user
+        return Note.objects.filter(user=user)
+        
   
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
