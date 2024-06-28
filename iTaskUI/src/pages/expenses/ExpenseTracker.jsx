@@ -9,7 +9,10 @@ import { ToastContainer } from 'react-toastify';
 
 
 const ExpenseTracker = () => {
+  
   const {budgetData} = useBudget()
+
+  console.log("budgret data are :",budgetData)
   const colors_array = [
     'red',
     'green',
@@ -30,21 +33,16 @@ const ExpenseTracker = () => {
       </div>
       
       <h1 className='text-3xl font-bold text-slate-700 mb-3 -mt-6 text-center'>Your Existing Budget</h1>
-
+      
       <div className="bg-slate-200 rounded-lg p-10 grid grid-cols-1 md:grid-cols-3 gap-5">
-        {budgetData && budgetData.map((data, index)=>{
-          if(index === 5){
-            color_ind = 0
-          }
-          const color = colors_array[color_ind]
-          color_ind += 1
-
-          return(
+      {budgetData ? budgetData.map((data, index) => {
+          const color = colors_array[index % colors_array.length];
+          return (
             <div key={data.id}>
-                <ExistingBudget color={color} data={data}/>
+              <ExistingBudget color={color} data={data} />
             </div>
-          )
-        })}
+          );
+        }) : <div className=''>No Budget Found</div>}
 
       </div>
       {/* Container for recent expenses table */}
